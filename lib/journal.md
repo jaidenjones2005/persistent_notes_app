@@ -36,3 +36,18 @@ When a user saves a new note, both the file and the displayed note are updated.
 
 This phase helped me understand how to restore persistent data and handle file errors safely in Flutter.
 
+## Phase 4: Final Testing, Validation & Reflection
+
+In this phase, I tested the Persistent Notes App to make sure all the features worked together correctly.
+
+I tested the Dark Mode switch to verify that the selected theme stays saved after restarting the application.
+
+I also tested saving notes, printing the file contents to the console, and automatically restoring saved notes when the app starts.
+
+Another important part was testing error handling. The try/catch block prevents the app from crashing when a saved note file cannot be found.
+
+Throughout this project, I learned how SharedPreferences stores simple settings and how path_provider and dart:io work together to save files locally.
+
+The biggest takeaway was understanding the difference between temporary application state and persistent data. Persistent storage allows users to keep their settings and notes even after closing the application.
+
+Overall, this project helped me become more comfortable with local storage, asynchronous methods, and error handling in Flutter.
