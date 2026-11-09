@@ -12,3 +12,15 @@ Without the `?? false`, the program would have a type error because `getBool()` 
 
 Overall, this phase helped me understand how Flutter saves settings and restores them when the application starts.
 
+## Phase 2: Note File Storage & Console Inspection
+
+In this phase, I added the path_provider package and created a NoteStorage class to handle saving and reading notes.
+
+I learned how to use dart:io to write text to a file and read the saved contents.
+
+Testing file storage through the console is helpful because it allows me to verify that the data is actually being saved before adding more UI features.
+
+Separating the file operations into the NoteStorage class also keeps my main.dart organized and makes the code easier to maintain.
+
+This phase helped me understand how Flutter can store data locally on a device.
+
