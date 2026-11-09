@@ -24,3 +24,15 @@ Separating the file operations into the NoteStorage class also keeps my main.dar
 
 This phase helped me understand how Flutter can store data locally on a device.
 
+## Phase 3: Restoring & Displaying Notes in the UI
+
+In this phase, I updated the NoteStorage class to safely read saved notes using a try/catch block.
+
+I learned that attempting to read a file that does not exist causes a FileSystemException. The try/catch block prevents the app from crashing by returning an empty string instead.
+
+I also updated the app to automatically load saved notes when it starts and display them inside a Card widget.
+
+When a user saves a new note, both the file and the displayed note are updated.
+
+This phase helped me understand how to restore persistent data and handle file errors safely in Flutter.
+

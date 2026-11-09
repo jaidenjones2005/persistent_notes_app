@@ -23,4 +23,14 @@ class NoteStorage {
     final file = await _localFile;
     return file.readAsString();
   }
+
+  // Phase 3: Safely read saved notes
+  Future<String> readNote() async {
+    try {
+      final file = await _localFile;
+      return await file.readAsString();
+    } catch (e) {
+      return '';
+    }
+  }
 }

@@ -24,13 +24,16 @@ class _PersistentNotesAppState extends State<PersistentNotesApp> {
   final NoteStorage _storage = NoteStorage();
 
   String _statusMessage = 'No note saved yet.';
+  String _savedNote = '';
 
   @override
   void initState() {
     super.initState();
     _loadThemePreference();
+    _loadSavedNote();
   }
 
+  // Load saved Dark Mode preference
   Future<void> _loadThemePreference() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -41,6 +44,7 @@ class _PersistentNotesAppState extends State<PersistentNotesApp> {
     });
   }
 
+  // Save Dark Mode preference
   Future<void> _updateTheme(bool newValue) async {
     setState(() {
       _isDarkMode = newValue;
@@ -50,13 +54,33 @@ class _PersistentNotesAppState extends State<PersistentNotesApp> {
     await prefs.setBool('isDarkMode', newValue);
   }
 
+  // Phase 3: Load saved note when app starts
+  Future<void> _loadSavedNote() async {
+    final note = await _storage.readNote();
+
+    if (!mounted) return;
+
+    setState(() {
+      _savedNote = note;
+      _noteController.text = note;
+
+      _statusMessage = note.isEmpty
+          ? 'No notes saved yet.'
+          : 'Saved note restored!';
+    });
+  }
+
+  // Save note and update screen
   Future<void> _saveNote() async {
     try {
-      await _storage.writeNote(_noteController.text);
+      final text = _noteController.text;
+
+      await _storage.writeNote(text);
 
       if (!mounted) return;
 
       setState(() {
+        _savedNote = text;
         _statusMessage = 'Note saved to disk!';
       });
     } catch (e) {
@@ -68,6 +92,7 @@ class _PersistentNotesAppState extends State<PersistentNotesApp> {
     }
   }
 
+  // Print saved file to console
   Future<void> _printNote() async {
     try {
       final content = await _storage.readRawContent();
@@ -101,7 +126,9 @@ class _PersistentNotesAppState extends State<PersistentNotesApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Persistent Notes App',
-      theme: _isDarkMode ? ThemeData.dark() : ThemeData.light(),
+      theme: _isDarkMode
+          ? ThemeData.dark()
+          : ThemeData.light(),
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Persistent Notes App'),
@@ -111,6 +138,7 @@ class _PersistentNotesAppState extends State<PersistentNotesApp> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+
               const Icon(
                 Icons.note_alt,
                 size: 70,
@@ -169,6 +197,31 @@ class _PersistentNotesAppState extends State<PersistentNotesApp> {
               Text(
                 _statusMessage,
                 textAlign: TextAlign.center,
+              ),
+
+              const SizedBox(height: 25),
+
+              // Phase 3: Display saved note
+              const Text(
+                'Saved Note:',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 10),
+
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    _savedNote.isEmpty
+                        ? 'No notes saved yet.'
+                        : _savedNote,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
               ),
             ],
           ),
